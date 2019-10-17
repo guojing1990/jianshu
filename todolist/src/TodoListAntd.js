@@ -1,36 +1,40 @@
 import React, {Component, Fragment} from 'react';
-import TodoItem from './TodoItem';
-import { Input, Button } from 'antd';
+import { Input, Button, List, Typography } from 'antd';
 import 'antd/dist/antd.css';
-import './style.css';
+import store from './store';
+import axios from 'axios';
 
 class TodoList extends Component {
   constructor (props) {
     super(props);
     // 当组件的state或者props发生改变的时候，render函数就会重新执行
-    this.state = {
-      inputValue: '',
-      list: []
-    };
+    this.state = store.getState();
+    console.log(store.getState());
+  }
+  componentDidMount () {
+      axios.get('/api/todolist').then((res) => {
+          console.log(res);
+      })
   }
   render () {
+      
     return (
       // Fragment 相当于占位符
       <Fragment>
         {/* 这是注释 */}
-        <label htmlFor="insertArea">输入内容：</label>
-        <Input placeholder="todoInfo"/>
+        <Input value={this.state.inputValue} placeholder="todoInfo"/>
         <Button type="primary">提交</Button>
-        <input 
-          id="insertArea"
-          className="input"
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-          ref={(input) => {this.input = input}}
+        <List
+            bordered
+            dataSource={this.state.list}
+            renderItem={item => (
+                <List.Item>
+                <Typography.Text mark>[ITEM]</Typography.Text> {item}
+                </List.Item>
+            )}
         />
-        <button onClick={this.handleBtnClick}>提交</button>
         <ul>
-          {this.getTodoItem()}
+          {/* {this.getTodoItem()} */}
           {/* {
             // this.getTodoItem()
             this.state.list.map((item, i) => {
@@ -53,24 +57,7 @@ class TodoList extends Component {
       </Fragment>
     );
   }
-  getTodoItem = () => {
-    return this.state.list.map((item, i) => {
-      return (
-        <TodoItem 
-          key={i}
-          item={item} 
-          index={i}
-          deleteItem={this.handleItemDelete}
-        />
-        // <li 
-        //   key={i} 
-        //   onClick={() => this.handleItemDelete(i)}
-        //   dangerouslySetInnerHTML = {{__html: item}}
-        // >
-        // </li>
-      )
-    })
-  }
+  
   handleInputChange = (e) => {
     // 使用函数返回值，异步设置state提升性能
     const value = this.input.value;
