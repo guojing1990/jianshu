@@ -1,4 +1,4 @@
-import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DEELTE_TODO_ITEM, INIT_LIST_ACTION} from './actionTypes';
+import {GET_INIT_LIST, CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DEELTE_TODO_ITEM, INIT_LIST_ACTION} from './actionTypes';
 import axios from 'axios';
 export const getInputChangeAction = (value) => ({
     type: CHANGE_INPUT_VALUE,
@@ -15,7 +15,11 @@ export const initListAction = (data) => ({
     type: INIT_LIST_ACTION,
     data
 })
-
+// saga
+export const getInitList = () => ({
+    type: GET_INIT_LIST
+})
+// thunk
 export const getTodoList = () => {
     return (dispatch) => {
         axios.get('http://mock-api.com/NnX4mkny.mock/todolist').then((res) => {

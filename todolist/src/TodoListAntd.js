@@ -3,7 +3,7 @@ import React, {Component, Fragment} from 'react';
 import 'antd/dist/antd.css';
 import store from './store';
 
-import {getTodoList, getInputChangeAction, getAddItemAction, getDeleteItemAction, initListAction} from './store/actionCreators';
+import {getInitList, getTodoList, getInputChangeAction, getAddItemAction, getDeleteItemAction, initListAction} from './store/actionCreators';
 import TodoListUI from './TodoListUI';
 class TodoList extends Component {
   constructor (props) {
@@ -20,8 +20,11 @@ class TodoList extends Component {
       //   store.dispatch(action);
       //   console.log(res);
       // })
-      const action = getTodoList();
-      store.dispatch(action);
+      // thunk
+      // const action = getTodoList();
+      // store.dispatch(action);
+      // saga
+      const action = getInitList();
   }
   render () {
     return (
