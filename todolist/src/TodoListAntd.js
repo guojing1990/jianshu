@@ -20,11 +20,16 @@ class TodoList extends Component {
       //   store.dispatch(action);
       //   console.log(res);
       // })
+
       // thunk
+      
       // const action = getTodoList();
       // store.dispatch(action);
+
       // saga
+
       const action = getInitList();
+      store.dispatch(action);
   }
   render () {
     return (
