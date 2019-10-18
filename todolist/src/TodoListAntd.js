@@ -1,15 +1,17 @@
 import React, {Component, Fragment} from 'react';
-import { Input, Button, List, Typography } from 'antd';
+
 import 'antd/dist/antd.css';
 import store from './store';
 import axios from 'axios';
-
+import {getInputChangeAction, getAddItemAction, getDeleteItemAction} from './store/actionCreators';
+import TodoListUI from './TodoListUI';
 class TodoList extends Component {
   constructor (props) {
     super(props);
     // 当组件的state或者props发生改变的时候，render函数就会重新执行
     this.state = store.getState();
     console.log(store.getState());
+    store.subscribe(this.handleStoreChange);
   }
   componentDidMount () {
       axios.get('/api/todolist').then((res) => {
@@ -17,79 +19,32 @@ class TodoList extends Component {
       })
   }
   render () {
-      
     return (
-      // Fragment 相当于占位符
-      <Fragment>
-        {/* 这是注释 */}
-        <Input value={this.state.inputValue} placeholder="todoInfo"/>
-        <Button type="primary">提交</Button>
-        <List
-            bordered
-            dataSource={this.state.list}
-            renderItem={item => (
-                <List.Item>
-                <Typography.Text mark>[ITEM]</Typography.Text> {item}
-                </List.Item>
-            )}
-        />
-        <ul>
-          {/* {this.getTodoItem()} */}
-          {/* {
-            // this.getTodoItem()
-            this.state.list.map((item, i) => {
-              return (
-                <TodoItem 
-                  item={item} 
-                  index={i}
-                  deleteItem={this.handleItemDelete}
-                />
-                // <li 
-                //   key={i} 
-                //   onClick={() => this.handleItemDelete(i)}
-                //   dangerouslySetInnerHTML = {{__html: item}}
-                // >
-                // </li>
-              )
-            })
-          } */}
-        </ul>
-      </Fragment>
+      <TodoListUI 
+        inputValue={this.state.inputValue}
+        list = {this.state.list}
+        handleInputChange = {this.handleInputChange}
+        handleBtnClick = {this.handleBtnClick}
+        handleItemDelete = {this.handleItemDelete}
+      />
     );
   }
   
   handleInputChange = (e) => {
-    // 使用函数返回值，异步设置state提升性能
-    const value = this.input.value;
-    this.setState(() => ({
-        inputValue: value
-      })
-    );
-    // this.setState({
-    //   inputValue: e.target.value
-    // });
+    const action = getInputChangeAction(e.target.value);
+    store.dispatch(action);
+  }
+  handleStoreChange = () => {
+    this.setState(store.getState());
   }
   handleBtnClick = () => {
-    this.setState((prevState) => ({
-      list: [prevState.inputValue, ...prevState.list],
-      inputValue: ''
-    }));
-    // this.setState({
-    //   list: [this.state.inputValue, ...this.state.list],
-    //   inputValue: ''
-    // });
+    const action = getAddItemAction();
+    store.dispatch(action);
   }
   handleItemDelete = (index) => {
-    // const list = [...this.state.list];
-    // list.splice(index, 1);
-    this.setState((prevState) => {
-      const list = [...prevState.list];
-      list.splice(index, 1);
-      return {list};
-    });
-    // this.setState({
-    //   list: list
-    // });
+    console.log(index);
+    const action = getDeleteItemAction(index);
+    store.dispatch(action);
   }
 }
 export default TodoList;
