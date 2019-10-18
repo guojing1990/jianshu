@@ -2,8 +2,8 @@ import React, {Component, Fragment} from 'react';
 
 import 'antd/dist/antd.css';
 import store from './store';
-import axios from 'axios';
-import {getInputChangeAction, getAddItemAction, getDeleteItemAction} from './store/actionCreators';
+
+import {getTodoList, getInputChangeAction, getAddItemAction, getDeleteItemAction, initListAction} from './store/actionCreators';
 import TodoListUI from './TodoListUI';
 class TodoList extends Component {
   constructor (props) {
@@ -14,9 +14,14 @@ class TodoList extends Component {
     store.subscribe(this.handleStoreChange);
   }
   componentDidMount () {
-      axios.get('/api/todolist').then((res) => {
-          console.log(res);
-      })
+      // axios.get('http://mock-api.com/NnX4mkny.mock/todolist').then((res) => {
+      //   const data = res.data; 
+      //   const action = initListAction(data);
+      //   store.dispatch(action);
+      //   console.log(res);
+      // })
+      const action = getTodoList();
+      store.dispatch(action);
   }
   render () {
     return (
