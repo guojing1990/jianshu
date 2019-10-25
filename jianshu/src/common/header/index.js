@@ -93,10 +93,18 @@ class Header extends Component {
         const newList = list.toJS();
         const pageList = []
         if (newList.length) {
-            for (let i = (page - 1)  * 10; i < page * 10; i ++) {
-                pageList.push(
-                    <SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
-                )
+            if (page < totalPage) {
+                for (let i = (page - 1)  * 10; i < page * 10; i ++) {
+                    pageList.push(
+                        <SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
+                    )
+                }
+            } else {
+                for (let i = (page - 1)  * 10; i < newList.length; i ++) {
+                    pageList.push(
+                        <SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
+                    )
+                }
             }
         }
         if (show) {
