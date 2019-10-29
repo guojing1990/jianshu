@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {actionCreators} from './store';
 import {
     DetailWrapper,
     Header,
@@ -6,20 +8,25 @@ import {
 } from './style';
 class Detail extends Component {
     render () {
+        const {title, content} = this.props;
         return (
             <DetailWrapper>
-                <Header>写文章收到一笔巨款</Header>
-                <Content>
-                    <img alt="" src="//upload-images.jianshu.io/upload_images/19027126-baceb85ec3cd1254.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp"/>
-                    <p>
-                    享受写作的第25天，微信收到一条通知，显示知识星球上的一篇文章收到一位星友的130元的打赏，心情特别激动，无以言表。上星球一看是来自Lina老师，感谢Lina老师的肯定与鼓励，据了解,Lina老师是位非常优秀的人物，为人还特别的低调谦虚。
-                    </p>
-                    <p>
-                    这是我坚持写作以来收到的单次金额最大的一笔，它的意义绝对不止是金钱本身的面额那么简单，在我写作的道路上，它有着更加积极而深远的意义。
-                    </p>
-                </Content>
+                <Header>{title}</Header>
+                <Content dangerouslySetInnerHTML={{__html: content}}/>
             </DetailWrapper>
         )
     }
+    componentDidMount () {
+        this.props.getDetail(this.props.match.params.id)
+    }
 }
-export default Detail;
+const mapStateToProps = (state) => ({
+    title: state.getIn(['detail', 'title']),
+    content: state.getIn(['detail', 'content'])
+})
+const mapDispatchToProps = (dispatch) => ({
+    getDetail (id) {
+        dispatch(actionCreators.getDetail(id))
+    }
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
