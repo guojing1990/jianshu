@@ -4,6 +4,7 @@ export const HeaderWrapper = styled.div`
     height: 58px;
     border-bottom: 1px solid #f0f0f0;
     postion: relative;
+    z-index:1;
 `;
 export const Logo = styled.div`
     position: absolute;
@@ -41,6 +42,7 @@ export const NavItem = styled.div`
 export const SearchWrapper = styled.div`
     position: relative;
     float: left;
+    z-index:1;
     .zoom{
         position: absolute;
         right: 5px;
